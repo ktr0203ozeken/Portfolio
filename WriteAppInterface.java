@@ -4,12 +4,12 @@ public interface WriteAppInterface {
     //双方向は別のインターフェイスに
 
     //メッセージをセットし送る
-    int sendMessage(String message); 
+    long sendMessage(String message); 
 
     //メッセージを取得
-    String getMessage(int messageId); 
+    String getMessage(long messageId); 
 
     //メッセージを削除
-    void deleteMessage(int messageId); 
+    void deleteMessage(long messageId); 
     
 }

@@ -5,7 +5,7 @@ public class MainTest {
         WriteApp writeApp =new WriteApp();
 
         //writeApp.sendMessage
-        int messageId=writeApp.sendMessage("こんにちは");
+        long messageId=writeApp.sendMessage("こんにちは");
         System.out.println(messageId);
 
         //writeApp.getMessage

@@ -3,23 +3,23 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class WriteApp implements WriteAppInterface {
-    private int messageId=0;
-    private Map<Integer,String> messages=new HashMap<>();
+    private long messageId=0L; //メッセージIDの初期化
+    private final Map<Long,String> messages=new HashMap<>();
     private static final Scanner scanner = new Scanner(System.in);
     @Override
-    public int sendMessage(String message) {
+    public long sendMessage(String message) {
         messageId++; //インクリメント
         messages.put(messageId, message); //Mapに格納
         return messageId;  //メッセージidを返す
     }
 
     @Override
-    public String getMessage(int messageId) {
+    public String getMessage(long messageId) {
         return messages.getOrDefault(messageId,"このメッセージは存在しません");
     }
 
     @Override
-    public void deleteMessage(int messageId) {
+    public void deleteMessage(long messageId) {
 
         if (!messages.containsKey(messageId)) {
             System.out.println("メッセージID " + messageId + " は存在しません");
