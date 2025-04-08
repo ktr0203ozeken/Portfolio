@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import org.springframework.stereotype.Component;
+@Component
 public class WriteApp implements WriteAppInterface {
     private long messageId=0L; //メッセージIDの初期化
     private final Map<Long,String> messages=new HashMap<>();
