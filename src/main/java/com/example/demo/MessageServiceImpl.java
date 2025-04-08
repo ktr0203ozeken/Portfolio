@@ -6,10 +6,12 @@ import java.util.Scanner;
 
 import org.springframework.stereotype.Component;
 @Component
-public class WriteApp implements WriteAppInterface {
+public class MessageServiceImpl implements MessageService {
+	
     private long messageId=0L; //メッセージIDの初期化
     private final Map<Long,String> messages=new HashMap<>();
     private static final Scanner scanner = new Scanner(System.in);
+    
     @Override
     public long sendMessage(String message) {
         messageId++; //インクリメント

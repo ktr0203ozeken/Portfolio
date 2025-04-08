@@ -1,6 +1,6 @@
 package com.example.demo;
 
-public interface WriteAppInterface {
+public interface MessageService{
 
     //オーバーライドする必要があるためこのくらいでよい
     //双方向は別のインターフェイスに

@@ -14,7 +14,7 @@ public class PortfolioApplication implements CommandLineRunner {
 
     // 依存性をDIで注入
     @Autowired
-    private WriteAppInterface writeAppInterface;
+    private MessageService messageService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -22,18 +22,18 @@ public class PortfolioApplication implements CommandLineRunner {
         long messageId;
         
         //メッセージの送信
-        messageId=writeAppInterface.sendMessage("こんにちは");
+        messageId=messageService.sendMessage("こんにちは");
         System.out.println(messageId);
 
         //メッセージの受け取り
-        String message = writeAppInterface.getMessage(messageId);
+        String message = messageService.getMessage(messageId);
         System.out.println(message);
 
         // メッセージ削除
-        writeAppInterface.deleteMessage(messageId);
+        messageService.deleteMessage(messageId);
         
       //削除後のメッセージ取得の動作確認
-        message=writeAppInterface.getMessage(messageId);
+        message=messageService.getMessage(messageId);
         System.out.println(message);
     }
 }
