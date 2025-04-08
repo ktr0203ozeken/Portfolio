@@ -1,3 +1,5 @@
+package com.example.demo;
+
 public interface WriteAppInterface {
 
     //オーバーライドする必要があるためこのくらいでよい
