@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.ozeken.messageapp;
 
 public class MainTest {
     public static void main(String[] args) {

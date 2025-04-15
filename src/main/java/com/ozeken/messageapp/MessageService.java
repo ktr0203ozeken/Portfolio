@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.ozeken.messageapp;
 
 public interface MessageService {
 

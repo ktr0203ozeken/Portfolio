@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.ozeken.messageapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.demo.MessageService;
+import com.ozeken.messageapp.MessageService;
 
 @Controller
 public class MessageController {
