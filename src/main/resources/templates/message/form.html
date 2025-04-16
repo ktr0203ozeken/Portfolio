@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>メッセージフォーム</title>
+</head>
+
+<body>
+	<h1>メッセージフォーム</h1>
+
+	<!-- メッセージ送信フォーム -->
+	<form th:action="@{/message/send}" method="post">
+
+		<!--メッセージ入力欄-->
+		<label for="message">メッセージを入力</label><br>
+		<textarea name="message" placeholder="メッセージを入力してください"></textarea>
+		<input type="submit" value="送信">
+
+		<div th:switch="${messageId }">
+			<!--エラーメッセージ-->
+			<p style="color: red;" th:case=null th:text="${error}"></p>
+			<p th:case="*" th:text="|メッセージid:${messageId} 送信したメッセージ:${message}|"></p>
+
+		</div>
+	</form>
+
+</body>
+
+</html>
