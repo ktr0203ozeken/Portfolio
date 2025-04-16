@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ozeken.messageapp.mapper.MessageMapper">
+
+<!-- SELECTすべてのメッセージを表示 -->
+<select id="getAllMessage" resultType="com.ozeken.messageapp.entity.Message">
+SELECT id, content FROM message ORDER BY id
+</select>
+
+<!--SELECT idを指定してメッセージを表示 -->
+<select id="getMessage"
+        parameterType="long"
+        resultType="com.ozeken.messageapp.entity.Message">
+        SELECT id, content FROM message WHERE id = #{id}
+</select>
+
+<!-- INSERTメッセージを追加 -->
+<insert id="insertMessage" parameterType="com.ozeken.messageapp.entity.Message">
+INSERT INTO message (content) VALUES (#{content})
+</insert>
+
+<!-- DELETEメッセージを削除 -->
+<delete id="deleteMessage" parameterType="long">
+DELETE FROM message WHERE id = #{id}
+</delete>
+
+</mapper>
