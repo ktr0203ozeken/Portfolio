@@ -1,60 +1,62 @@
 package com.ozeken.messageapp.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.ozeken.messageapp.MessageService;
+import com.ozeken.messageapp.entity.Message;
+import com.ozeken.messageapp.mapper.MessageMapper;
+
+import lombok.RequiredArgsConstructor;
 
 @Controller
+@RequiredArgsConstructor
 public class MessageController {
-
-	/* DI */
-	@Autowired
-	private MessageService messageService;
-
-	// メッセージ送信フォームを表示する
+	
+	//メッセージフォームのURLを指定
 	@GetMapping("/message/form")
-	public String messageForm(@RequestParam(required = false) Long messageId,
-			@RequestParam(required = false) String message, Model model) {
-
-		model.addAttribute("messageId", messageId);
-		model.addAttribute("message", message);
-
-		return "message-form";
+	public String showMessageForm() {
+		return "message/form";
 	}
-
-	// メッセージを送信する
+	
+	//DI
+	private final MessageMapper messageMapper;
+	
+	//メッセージを全て取得する
+	@GetMapping("/list")
+	public String showAllMessages(Model model) {
+		model.addAttribute("successmessage", "一覧表示");
+		model.addAttribute("messages", messageMapper.getAllMessage());
+		return "message/success";
+	}
+	
+	//特定のIDを持つメッセージを取得する
+	@GetMapping("/detail/{id}")
+	//@PathVariableでURLの変数を取得
+	public String showMessage(@PathVariable Long id, Model model) {
+		model.addAttribute("successmessage", "詳細表示");
+		model.addAttribute("message", messageMapper.getMessage(id));
+		return "message/success";
+	}
+	
+	// メッセージを新規作成（フォームからのPOST）
 	@PostMapping("/message/send")
-	public String sendMessage(@RequestParam String message, RedirectAttributes redirectAttributes) {
-		// バリデーションチェック
-		if (message == null || message.trim().isEmpty()) {
-			redirectAttributes.addFlashAttribute("error", "メッセージは必須です");
-			return "redirect:/message/form";
-		}
-
-		try {
-			long messageId = messageService.sendMessage(message);
-			System.out.println("メッセージID: " + messageId + "  メッセージ: " + message);
-			redirectAttributes.addAttribute("messageId", messageId);
-			redirectAttributes.addAttribute("message", message);
-			return "redirect:/message/form";
-		} catch (Exception e) {
-			redirectAttributes.addFlashAttribute("error", "メッセージの送信に失敗しました。再試行してください。");
-			return "redirect:/message/form";
-		}
+	public String createMessage(@RequestParam("message") String content, Model model) {
+	    Message message = new Message();
+	    message.setContent(content);
+	    messageMapper.insertMessage(message);
+	    model.addAttribute("successmessage", "メッセージを保存しました");
+	    return "message/success";
 	}
-
-	// メッセージを取得する
-	@GetMapping("/message/get")
-	public String getMessage(long messageId) {
-		String message = messageService.getMessage(messageId);
-		System.out.println("メッセージID: " + messageId + "  メッセージ: " + message);
-		// フォームにリダイレクト
-		return "redirect:/message/form";
+	//メッセージを削除する
+	@GetMapping("/delete/{id}")
+	public String deleteMessage(@PathVariable Long id, Model model) {
+		messageMapper.deleteMessage(id);
+		model.addAttribute("successmessage", "メッセージを削除しました");
+		return "message/success";
 	}
+	
 }
