@@ -1,11 +1,16 @@
 package com.ozeken.messageapp.controller;
 
+import java.sql.Timestamp;
+
+import jakarta.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ozeken.messageapp.entity.Message;
 import com.ozeken.messageapp.mapper.MessageMapper;
@@ -15,48 +20,46 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class MessageController {
-	
-	//メッセージフォームのURLを指定
+
+	// DI
+	private final MessageMapper messageMapper;
+
+	// メッセージ送信フォームを表示する
 	@GetMapping("/message/form")
-	public String showMessageForm() {
+	public String messageForm(Model model) {
+		// 空のMessageオブジェクトを作成
+		model.addAttribute("messageForm", new Message());
 		return "message/form";
 	}
-	
-	//DI
-	private final MessageMapper messageMapper;
-	
-	//メッセージを全て取得する
-	@GetMapping("/list")
-	public String showAllMessages(Model model) {
-		model.addAttribute("successmessage", "一覧表示");
-		model.addAttribute("messages", messageMapper.getAllMessage());
+	// すべてのメッセージを取得
+	@GetMapping("/message/list")
+	public String getAllMessage(Model model) {
+		//DBからselect
+		model.addAttribute("messages", messageMapper.getAllMessages());
 		return "message/success";
 	}
-	
-	//特定のIDを持つメッセージを取得する
-	@GetMapping("/detail/{id}")
-	//@PathVariableでURLの変数を取得
-	public String showMessage(@PathVariable Long id, Model model) {
-		model.addAttribute("successmessage", "詳細表示");
-		model.addAttribute("message", messageMapper.getMessage(id));
-		return "message/success";
-	}
-	
-	// メッセージを新規作成（フォームからのPOST）
+
+	// メッセージを送信する
 	@PostMapping("/message/send")
-	public String createMessage(@RequestParam("message") String content, Model model) {
-	    Message message = new Message();
-	    message.setContent(content);
+	public String sendMessage(@Valid @ModelAttribute("messageForm") Message message,
+	                          BindingResult result,
+	                          Model model,
+	                          RedirectAttributes redirectAttributes) {
+	    if (result.hasErrors()) {
+	    	result.getAllErrors().forEach(error -> System.out.println("→ " + error.getDefaultMessage()));
+	        model.addAttribute("messageForm", message); 
+	        return "message/form";
+	    }
+
+	    message.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 	    messageMapper.insertMessage(message);
-	    model.addAttribute("successmessage", "メッセージを保存しました");
-	    return "message/success";
+
+	    redirectAttributes.addFlashAttribute("messageId", message.getMessageId());
+	    redirectAttributes.addFlashAttribute("message", message.getContent());
+	    redirectAttributes.addFlashAttribute("createdAt", message.getCreatedAt());
+
+	    return "redirect:/message/form";
 	}
-	//メッセージを削除する
-	@GetMapping("/delete/{id}")
-	public String deleteMessage(@PathVariable Long id, Model model) {
-		messageMapper.deleteMessage(id);
-		model.addAttribute("successmessage", "メッセージを削除しました");
-		return "message/success";
-	}
-	
+
+
 }
