@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>実行結果</title>
+</head>
+<body>
+    <h1>実行結果</h1>
+    <table th:if="${messages}" border="1" >
+        <thead>
+            <tr>
+                <th>メッセージID</th>
+                <th>メッセージ</th>
+                <th>送信日時</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="message : ${messages}">
+                <td th:text="${message.messageId}"></td>
+                <td th:text="${message.content}"></td>
+                <td th:text="${message.createdAt}"></td>
+            </tr>
+        </tbody>
+    </table>
+	<br>
+	<a href="@{/message/form}">フォームに戻る</a>
+</body>
+</html>

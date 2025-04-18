@@ -1,30 +1,44 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
-	<meta charset="UTF-8">
-	<title>メッセージフォーム</title>
+    <meta charset="UTF-8">
+    <title>メッセージフォーム</title>
+    <style>
+        /* ✅ 成功メッセージを画面下部に固定 */
+        .fixed-success {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-top: 2px solid #28a745;
+            font-size: 14px;
+        }
+    </style>
 </head>
-
 <body>
-	<h1>メッセージフォーム</h1>
+    <h1>メッセージ送信フォーム</h1>
 
-	<!-- メッセージ送信フォーム -->
-	<form th:action="@{/message/send}" method="post">
+    <!-- ✅ メッセージ送信フォーム -->
+    <form th:action="@{/message/send}" th:object="${messageForm}" method="post">
+        <label for="content">メッセージを入力</label><br>
+        <textarea th:field="*{content}" placeholder="メッセージを入力してください"></textarea>
 
-		<!--メッセージ入力欄-->
-		<label for="message">メッセージを入力</label><br>
-		<textarea name="message" placeholder="メッセージを入力してください"></textarea>
-		<input type="submit" value="送信">
+        <!-- ✅ バリデーションエラー表示 -->
+        <div th:if="${#fields.hasErrors('content')}" style="color:red;">
+            <p th:errors="*{content}">メッセージエラー</p>
+        </div>
 
-		<div th:switch="${messageId }">
-			<!--エラーメッセージ-->
-			<p style="color: red;" th:case=null th:text="${error}"></p>
-			<p th:case="*" th:text="|メッセージid:${messageId} 送信したメッセージ:${message}|"></p>
+        <br>
+        <button type="submit">送信</button>
+    </form>
 
-		</div>
-	</form>
-
+    <!-- ✅ フラッシュ属性からの成功メッセージ表示（画面下に固定） -->
+    <div th:if="${messageId != null}" class="fixed-success">
+        <p><strong>送信完了！</strong></p>
+        <p th:text="|ID: ${messageId} / 内容: ${message} / 時刻: ${#dates.format(createdAt, 'yyyy/MM/dd HH:mm:ss')}|"></p>
+    </div>
 </body>
-
 </html>
