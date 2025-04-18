@@ -2,26 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ozeken.messageapp.mapper.MessageMapper">
 
-<!-- SELECTすべてのメッセージを表示 -->
-<select id="getAllMessage" resultType="com.ozeken.messageapp.entity.Message">
-SELECT id, content FROM message ORDER BY id
-</select>
-
-<!--SELECT idを指定してメッセージを表示 -->
-<select id="getMessage"
-        parameterType="long"
-        resultType="com.ozeken.messageapp.entity.Message">
-        SELECT id, content FROM message WHERE id = #{id}
-</select>
-
-<!-- INSERTメッセージを追加 -->
-<insert id="insertMessage" parameterType="com.ozeken.messageapp.entity.Message">
-INSERT INTO message (content) VALUES (#{content})
-</insert>
-
-<!-- DELETEメッセージを削除 -->
-<delete id="deleteMessage" parameterType="long">
-DELETE FROM message WHERE id = #{id}
-</delete>
-
+    <!--すべてのメッセージを取得-->
+    <select id="getAllMessages" resultType="com.ozeken.messageapp.entity.Message">
+        SELECT 
+        message_id AS messageId,
+        content,
+        created_at AS createdAt
+        FROM message
+        ORDER BY message_id
+    </select>
+    
+    <!--IDでメッセージを取得-->
+    <select id="getMessage" resultType="com.ozeken.messageapp.entity.Message" parameterType="long">
+        SELECT
+        message_id AS messageId,
+        content,
+        created_at AS createdAt
+        FROM message
+        WHERE message_id=#{messageId}
+    </select>
+    
+    <!-- メッセージ新規作成 -->
+     <insert id="insertMessage"
+        parameterType="com.ozeken.messageapp.entity.Message"
+        useGeneratedKeys="true"
+        keyProperty="messageId">
+        INSERT INTO message (content, created_at)
+        VALUES (#{message.content}, #{message.createdAt})
+    </insert>
 </mapper>

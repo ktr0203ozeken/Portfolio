@@ -3,22 +3,19 @@ package com.ozeken.messageapp.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.ozeken.messageapp.entity.Message;
 
 @Mapper
 public interface MessageMapper {
 	
-	// メッセージを全て取得するメソッド
-	List<Message> getAllMessage();
+	//メッセージを全件取得
+	List<Message> getAllMessages();
 	
-	// メッセージを取得するメソッド
-	Message getMessage(Long id);
+	//メッセージをIDで取得
+	Message getMessage(@Param("messageId") long messageId);
 	
-	// メッセージを保存するメソッド
-	void insertMessage(Message message);
-
-	// メッセージを削除するメソッド
-	void deleteMessage(Long id);
-
+	//メッセージを新規作成
+	void insertMessage(@Param("message") Message message);
 }
