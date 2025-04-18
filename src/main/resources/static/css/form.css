@@ -1,0 +1,24 @@
+/*  成功メッセージを画面下部に固定 */
+      .fixed-success {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          background-color: #d4edda;
+          color: #155724;
+          padding: 10px;
+          border-top: 2px solid #28a745;
+          font-size: 14px;
+      }
+	  
+	  .error-fixed {
+	      position: fixed;
+	      bottom: 0;
+	      left: 0;
+	      width: 100%;
+	      background-color: #ffe0e0;
+	      color: red;
+	      padding: 10px;
+	      font-weight: solid;
+	      box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+	  }

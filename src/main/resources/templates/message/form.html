@@ -3,31 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>メッセージフォーム</title>
-    <style>
-        /* ✅ 成功メッセージを画面下部に固定 */
-        .fixed-success {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: #d4edda;
-            color: #155724;
-            padding: 10px;
-            border-top: 2px solid #28a745;
-            font-size: 14px;
-        }
-    </style>
+    <!--リセットcss-->
+    <link rel="stylesheet" href="/css/ress.min.css">
+    <!--フォームのcss-->
+    <link rel="stylesheet" href="/css/form.css">
 </head>
 <body>
     <h1>メッセージ送信フォーム</h1>
 
-    <!-- ✅ メッセージ送信フォーム -->
+    <!-- メッセージ送信フォーム -->
     <form th:action="@{/message/send}" th:object="${messageForm}" method="post">
         <label for="content">メッセージを入力</label><br>
         <textarea th:field="*{content}" placeholder="メッセージを入力してください"></textarea>
 
-        <!-- ✅ バリデーションエラー表示 -->
-        <div th:if="${#fields.hasErrors('content')}" style="color:red;">
+        <!-- バリデーションエラー表示 -->
+        <div th:if="${#fields.hasErrors('content')}" class="error-fixed">
             <p th:errors="*{content}">メッセージエラー</p>
         </div>
 
@@ -35,7 +25,7 @@
         <button type="submit">送信</button>
     </form>
 
-    <!-- ✅ フラッシュ属性からの成功メッセージ表示（画面下に固定） -->
+    <!-- フラッシュ属性からの成功メッセージ表示-->
     <div th:if="${messageId != null}" class="fixed-success">
         <p><strong>送信完了！</strong></p>
         <p th:text="|ID: ${messageId} / 内容: ${message} / 時刻: ${#dates.format(createdAt, 'yyyy/MM/dd HH:mm:ss')}|"></p>
